@@ -53,6 +53,14 @@ OPTIONS = {
         'env_fallback': 'IONOS_PASSWORD',
         'type': 'str',
     },
+    'token': {
+        'description': ['The Ionos token. Overrides the IONOS_TOKEN environment variable.'],
+        'required': STATES,
+        'available': STATES,
+        'no_log': True,
+        'env_fallback': 'IONOS_TOKEN',
+        'type': 'str',
+    },
 }
 
 def transform_for_documentation(val):

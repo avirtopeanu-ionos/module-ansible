@@ -85,6 +85,14 @@ OPTIONS = {
         'env_fallback': 'IONOS_PASSWORD',
         'type': 'str',
     },
+    'token': {
+        'description': ['The Ionos token. Overrides the IONOS_TOKEN environment variable.'],
+        'required': STATES,
+        'available': STATES,
+        'no_log': True,
+        'env_fallback': 'IONOS_TOKEN',
+        'type': 'str',
+    },
     'wait': {
         'description': ['Wait for the resource to be created before returning.'],
         'default': True,
