@@ -21,9 +21,8 @@ on:
 
 jobs:
 
-  test:
-    if: github.event.pull_request.draft == false
-    name: Testing the Ansible Module
+  test-setup:
+    name: Setup for Testing the Ansible Module
     env:
         python-version: 3.8.0
         ionoscloud-version: 6.0.0b1
@@ -61,6 +60,21 @@ jobs:
         run: |
           python3 -m pip list
 
+  test-thread:
+    name: Testing the Ansible Module
+    env:
+      python-version: 3.8.0
+      ionoscloud-version: 6.0.0b1
+      ANSIBLE_LIBRARY: /home/runner/work/module-ansible/module-ansible/plugins/modules
+      IONOS_USERNAME: ${{ secrets.IONOS_USER_V6 }}
+      IONOS_PASSWORD: ${{ secrets.IONOS_PASSWORD_V6 }}
+
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    outputs:
+        python-version: ${{ env.python-version }}
+    needs: test-setup
+    steps:
       - name: Run DBaaS Postgres tests
         run: |
           ansible-playbook /home/runner/work/module-ansible/module-ansible/tests/dbaas-postgres/all-tests.yml
