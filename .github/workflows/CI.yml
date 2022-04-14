@@ -60,35 +60,46 @@ jobs:
         run: |
           python3 -m pip list
 
-    test-thread1:
-        name: Testing the Ansible Module
-        needs: test-setup
-        steps:
-          - name: Run DBaaS Postgres tests
-            run: |
-              ansible-playbook /home/runner/work/module-ansible/module-ansible/tests/dbaas-postgres/all-tests.yml
+  test-thread:
+    name: Testing the Ansible Module
+    env:
+      python-version: 3.8.0
+      ionoscloud-version: 6.0.0b1
+      ANSIBLE_LIBRARY: /home/runner/work/module-ansible/module-ansible/plugins/modules
+      IONOS_USERNAME: ${{ secrets.IONOS_USER_V6 }}
+      IONOS_PASSWORD: ${{ secrets.IONOS_PASSWORD_V6 }}
 
-          - name: Run Managed Kubernetes tests
-            run: |
-              ansible-playbook /home/runner/work/module-ansible/module-ansible/tests/managed-kubernetes/all-tests.yml
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    outputs:
+        python-version: ${{ env.python-version }}
+    needs: test-setup
+    steps:
+      - name: Run DBaaS Postgres tests
+        run: |
+          ansible-playbook /home/runner/work/module-ansible/module-ansible/tests/dbaas-postgres/all-tests.yml
 
-          - name: Run Compute Engine tests
-            run: |
-              ansible-playbook /home/runner/work/module-ansible/module-ansible/tests/compute-engine/all-tests.yml
+      - name: Run Managed Kubernetes tests
+        run: |
+          ansible-playbook /home/runner/work/module-ansible/module-ansible/tests/managed-kubernetes/all-tests.yml
 
-          - name: Run Managed Backup tests
-            run: |
-              ansible-playbook /home/runner/work/module-ansible/module-ansible/tests/managed-backup/all-tests.yml
+      - name: Run Compute Engine tests
+        run: |
+          ansible-playbook /home/runner/work/module-ansible/module-ansible/tests/compute-engine/all-tests.yml
 
-    #      - name: Run NAT Gateway tests
-    #        run: |
-    #          ansible-playbook /home/runner/work/module-ansible/module-ansible/tests/natgateway/all-tests.yml
+      - name: Run Managed Backup tests
+        run: |
+          ansible-playbook /home/runner/work/module-ansible/module-ansible/tests/managed-backup/all-tests.yml
 
-          - name: Run Network Load Balancer tests
-            run: |
-              ansible-playbook /home/runner/work/module-ansible/module-ansible/tests/networkloadbalancer/all-tests.yml
+#      - name: Run NAT Gateway tests
+#        run: |
+#          ansible-playbook /home/runner/work/module-ansible/module-ansible/tests/natgateway/all-tests.yml
 
-          - name: Run User Management tests
-            run: |
-              ansible-playbook /home/runner/work/module-ansible/module-ansible/tests/user-management/all-tests.yml
+      - name: Run Network Load Balancer tests
+        run: |
+          ansible-playbook /home/runner/work/module-ansible/module-ansible/tests/networkloadbalancer/all-tests.yml
+
+      - name: Run User Management tests
+        run: |
+          ansible-playbook /home/runner/work/module-ansible/module-ansible/tests/user-management/all-tests.yml
 
